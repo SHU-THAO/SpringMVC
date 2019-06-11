@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper   PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"  "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.shu.mapper.NewsCommentMapper">
+    <insert id="addComments" parameterType="com.shu.pojo.NewsComment">
+        insert into news_comment
+        <trim prefix="(" suffix=")" prefixOverrides=",">
+            <if test="content!=null and content !=''">
+                ,content
+            </if>
+            <if test="author!=null and author !=''">
+                ,author
+            </if>
+            <if test="creatDate!=null">
+                ,creatdate
+            </if>
+            <if test="newsDetail!=null and newsDetail.id!=null">
+                ,newsid
+            </if>
+        </trim>
+
+        <trim prefix="values(" suffix=")" prefixOverrides=",">
+            <if test="content!=null and content !=''">
+                ,#{content}
+            </if>
+            <if test="author!=null and author !=''">
+                ,#{author}
+            </if>
+            <if test="creatDate!=null">
+                ,#{creatDate}
+            </if>
+            <if test="newsDetail!=null and newsDetail.id!=null">
+                ,#{newsDetail.id}
+            </if>
+        </trim>
+    </insert>
+    <delete id="deleteById">
+        delete from news_comment where newsid = #{id}
+    </delete>
+
+    <select id="queryCommentsById" resultType="com.shu.pojo.NewsComment">
+        select id, content, author, creatdate AS creatDate from news_comment
+        <where>
+            <if test="id!=null">
+                and newsid = #{id}
+            </if>
+        </where>
+        ORDER BY creatdate desc
+    </select>
+</mapper>
